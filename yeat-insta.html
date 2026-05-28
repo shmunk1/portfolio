@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@shmunk1_ — Thomas Eïto</title>
+  <meta name="description" content="@shmunk1_ — Compte Instagram fan dédié au rappeur Yeat : 700K+ vues, contenus éditoriaux francophones. Par Thomas Eïto." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [role="button"] { cursor: none !important; }
+    :root {
+      --bg:      #0a0a0a;
+      --surface: #111111;
+      --surface2:#1a1a1a;
+      --border:  rgba(255,255,255,0.07);
+      --text:    #f0f0f8;
+      --muted:   #6b7280;
+      --accent1: #7c3aed;
+      --accent2: #06b6d4;
+      --grad:    linear-gradient(135deg, var(--accent1), var(--accent2));
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; cursor: none; }
+
+    /* Cursor */
+    #cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; }
+    #cursor .dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; position: absolute; transform: translate(-50%,-50%); }
+    #cursor .ring { width: 36px; height: 36px; border: 1.5px solid rgba(255,255,255,0.6); border-radius: 50%; position: absolute; transform: translate(-50%,-50%); transition: width .3s, height .3s, opacity .3s; }
+    body.cursor-hover #cursor .ring { width: 56px; height: 56px; opacity: 0.5; }
+
+    /* Blobs */
+    .blob-wrap { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(110px); opacity: 0.1; animation: drift 20s ease-in-out infinite alternate; }
+    .blob-1 { width: 500px; height: 500px; background: var(--accent1); top: -150px; left: -150px; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -10s; }
+    @keyframes drift { from { transform: translate(0,0); } to { transform: translate(50px,35px); } }
+
+    /* Nav */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; backdrop-filter: blur(20px); background: rgba(10,10,10,0.7); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    .nav-back { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; color: var(--muted); text-decoration: none; cursor: none; transition: color 0.25s; }
+    .nav-back:hover { color: var(--text); }
+    .nav-back:hover svg { transform: translateX(-3px); }
+    .nav-back svg { transition: transform 0.25s; }
+
+    main { position: relative; z-index: 1; }
+
+    /* Hero */
+    .project-hero { padding: 10rem 4rem 5rem; max-width: 860px; }
+
+    .project-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1rem; }
+    .project-title { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 7vw, 6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 1.5rem; }
+    .project-title span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .project-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.8rem; }
+    .tag { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; padding: 0.3rem 0.7rem; border-radius: 99px; background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25); color: #a78bfa; }
+    .tag.cyan { background: rgba(6,182,212,0.12); border-color: rgba(6,182,212,0.25); color: #67e8f9; }
+    .project-desc { font-size: 1.05rem; color: var(--muted); line-height: 1.75; max-width: 600px; font-weight: 300; }
+
+    /* Social links */
+    .social-links { display: flex; gap: 0.75rem; margin-top: 1.8rem; flex-wrap: wrap; }
+    .social-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: 99px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 500; color: var(--muted); text-decoration: none; cursor: none; transition: border-color 0.25s, color 0.25s, background 0.25s; }
+    .social-btn:hover { border-color: rgba(124,58,237,0.5); color: var(--text); background: rgba(124,58,237,0.07); }
+    .social-btn svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+
+    /* Sections */
+    .content-section { padding: 5rem 4rem; border-top: 1px solid var(--border); }
+    .content-section:last-of-type { padding-bottom: 8rem; }
+    .section-header { margin-bottom: 3.5rem; }
+    .section-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.5rem; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .stat-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.6rem 1.4rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .stat-card:hover { border-color: rgba(124,58,237,0.35); transform: translateY(-3px); }
+    .stat-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    /* Posts grid */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .post-item {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      cursor: none;
+      transition: box-shadow 0.4s, transform 0.4s;
+      aspect-ratio: 4 / 5;
+    }
+    .post-item:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.55); transform: translateY(-4px); }
+    .post-item img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 0.5s ease; }
+    .post-item:hover img { transform: scale(1.04); }
+
+    /* Visuel items (image + texte layout pour les stats screenshots) */
+    .visuel-list { display: flex; flex-direction: column; gap: 4rem; }
+    .visuel-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .visuel-item:nth-child(even) .visuel-img-wrap { order: 2; }
+    .visuel-item:nth-child(even) .visuel-text    { order: 1; }
+    .visuel-img-wrap {
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+      cursor: none;
+      transition: box-shadow 0.4s;
+    }
+    .visuel-img-wrap:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.55); }
+    .visuel-img-wrap img { width: 100%; display: block; transition: transform 0.5s ease; height: auto; object-fit: unset; }
+    .visuel-img-wrap:hover img { transform: scale(1.03); }
+    .visuel-num { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.6rem; }
+    .visuel-name { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .visuel-desc { font-size: 0.95rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
+
+    @media (max-width: 900px) {
+      .visuel-item { grid-template-columns: 1fr; gap: 1.5rem; }
+      .visuel-item:nth-child(even) .visuel-img-wrap { order: 0; }
+      .visuel-item:nth-child(even) .visuel-text    { order: 1; }
+    }
+
+    /* Lightbox */
+    #lightbox { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; cursor: none; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 88vw; max-height: 88vh; border-radius: 10px; object-fit: contain; }
+    #lightbox-close { position: absolute; top: 1.5rem; right: 2rem; font-size: 1.8rem; color: var(--muted); cursor: none; background: none; border: none; transition: color 0.2s; line-height: 1; }
+    #lightbox-close:hover { color: var(--text); }
+    #lightbox-prev, #lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(8px); color: var(--text); cursor: none; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    #lightbox-prev { left: 1.5rem; }
+    #lightbox-next { right: 1.5rem; }
+    #lightbox-prev:hover, #lightbox-next:hover { background: rgba(255,255,255,0.15); }
+
+    /* Footer */
+    footer { padding: 2rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+    footer p { font-size: 0.8rem; color: var(--muted); }
+    .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Light mode */
+    body.light { --bg: #f4f4fc; --surface: #ffffff; --surface2: #ebebf5; --border: rgba(0,0,0,0.09); --text: #0d0d1a; --muted: #5a6272; }
+    body.light .blob { opacity: 0.05; }
+    body.light nav { background: rgba(244,244,252,0.75); border-bottom-color: rgba(0,0,0,0.07); }
+    body.light footer { border-top-color: rgba(0,0,0,0.07); }
+    body.light #cursor { mix-blend-mode: normal; }
+    body.light #cursor .dot { background: #0d0d1a; }
+    body.light #cursor .ring { border-color: rgba(0,0,0,0.45); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .project-hero, .content-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+    #settings-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 500; width: 40px; height: 40px; background: var(--surface2); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: none; transition: border-color 0.25s, transform 0.3s; color: var(--muted); }
+    #settings-btn:hover { border-color: rgba(124,58,237,0.5); color: var(--text); transform: rotate(45deg); }
+    #settings-panel { position: fixed; bottom: 5.5rem; right: 2rem; z-index: 500; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.4rem; width: 220px; display: none; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    #settings-panel.open { display: block; }
+    .settings-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; font-size: 0.82rem; color: var(--text); }
+    .settings-row:last-child { margin-bottom: 0; }
+    .toggle { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; transition: background 0.25s; cursor: none; }
+    .toggle-slider::before { content: ''; position: absolute; width: 14px; height: 14px; left: 2px; top: 2px; background: var(--muted); border-radius: 50%; transition: transform 0.25s, background 0.25s; }
+    .toggle input:checked + .toggle-slider { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.4); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent1); }
+    .color-swatches { display: flex; gap: 0.45rem; margin-top: 0.4rem; }
+    .swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: none; transition: transform 0.2s, border-color 0.2s; padding: 0; flex-shrink: 0; }
+    .swatch:hover { transform: scale(1.2); }
+    .swatch.active { border-color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"><div class="ring"></div><div class="dot"></div></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Portfolio.</a>
+    <a href="index.html" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Retour
+    </a>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <div class="project-hero">
+      <p class="project-label reveal">Réseaux Sociaux</p>
+      <h1 class="project-title reveal">@<span>shmunk1_</span></h1>
+      <div class="project-meta reveal">
+        <span class="tag">Content Creation</span>
+        <span class="tag">Community Management</span>
+        <span class="tag cyan">Instagram</span>
+      </div>
+      <p class="project-desc reveal">
+        Compte fan dédié au rappeur Yeat (plus de 700K vues, 666 abonnés). Je publie des contenus éditoriaux : analyses d'albums, actualités, opinions sur les sorties. L'objectif est de créer une communauté francophone autour de l'artiste avec un format proche du journalisme musical.
+      </p>
+      <div class="social-links reveal">
+        <a href="https://www.instagram.com/shmunk1_/" target="_blank" class="social-btn">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          @shmunk1_
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="content-section">
+      <div class="section-header">
+        <p class="section-label reveal">Chiffres clés</p>
+        <h2 class="section-title reveal">Performances du compte</h2>
+      </div>
+      <div class="stats-grid reveal">
+        <div class="stat-card">
+          <div class="stat-value">708K</div>
+          <div class="stat-label">vues totales</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">100K</div>
+          <div class="stat-label">interactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">15K</div>
+          <div class="stat-label">comptes touchés</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">86%</div>
+          <div class="stat-label">non-abonnés atteints</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">666</div>
+          <div class="stat-label">abonnés</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts -->
+    <div class="content-section">
+      <div class="section-header">
+        <p class="section-label reveal">Contenus</p>
+        <h2 class="section-title reveal">Posts publiés</h2>
+      </div>
+      <div class="posts-grid reveal">
+        <div class="post-item">
+          <img loading="lazy" src="images/yeat-insta/1.jpeg" alt="Post 1" />
+        </div>
+        <div class="post-item">
+          <img loading="lazy" src="images/yeat-insta/2.jpeg" alt="Post 2" />
+        </div>
+        <div class="post-item">
+          <img loading="lazy" src="images/yeat-insta/3.jpeg" alt="Post 3" />
+        </div>
+        <div class="post-item">
+          <img loading="lazy" src="images/yeat-insta/4.jpeg" alt="Post 4" />
+        </div>
+        <div class="post-item">
+          <img loading="lazy" src="images/yeat-insta/5.jpeg" alt="Post 5" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats screenshots -->
+    <div class="content-section">
+      <div class="section-header">
+        <p class="section-label reveal">Analytiques</p>
+        <h2 class="section-title reveal">Captures des statistiques</h2>
+      </div>
+      <div class="visuel-list">
+
+        <div class="visuel-item reveal">
+          <div class="visuel-img-wrap">
+            <img loading="lazy" src="images/yeat-insta/stats_content.png" alt="Stats contenu" />
+          </div>
+          <div class="visuel-text">
+            <p class="visuel-num">Stats 01</p>
+            <h3 class="visuel-name">Portée des contenus</h3>
+            <p class="visuel-desc">708 744 vues sur l'ensemble des publications, avec 86.1% provenant de comptes non-abonnés (portée organique). Les contenus dépassent largement la communauté existante et circulent en dehors du compte.</p>
+          </div>
+        </div>
+
+        <div class="visuel-item reveal">
+          <div class="visuel-img-wrap">
+            <img loading="lazy" src="images/yeat-insta/stats_follow.png" alt="Stats abonnés" />
+          </div>
+          <div class="visuel-text">
+            <p class="visuel-num">Stats 02</p>
+            <h3 class="visuel-name">Croissance des abonnés</h3>
+            <p class="visuel-desc">666 abonnés construits depuis le lancement du compte, uniquement par la régularité des publications et la qualité éditoriale, sans aucune publicité payante.</p>
+          </div>
+        </div>
+
+        <div class="visuel-item reveal">
+          <div class="visuel-img-wrap">
+            <img loading="lazy" src="images/yeat-insta/stats_interactions.png" alt="Stats interactions" />
+          </div>
+          <div class="visuel-text">
+            <p class="visuel-num">Stats 03</p>
+            <h3 class="visuel-name">Interactions</h3>
+            <p class="visuel-desc">100 167 interactions générées (likes, commentaires, partages, sauvegardes), dont 71.4% en provenance de non-abonnés. Un taux d'engagement élevé qui confirme la pertinence des sujets traités.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span class="footer-logo">Portfolio.</span>
+    <p>© 2026 (Thomas Eïto)</p>
+  </footer>
+
+  <div id="lightbox">
+    <button id="lightbox-close">✕</button>
+    <button id="lightbox-prev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <img id="lightbox-img" src="" alt="" />
+    <button id="lightbox-next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+  </div>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const dot = cursor.querySelector('.dot'), ring = cursor.querySelector('.ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+    (function animRing() {
+      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+      ring.style.left = rx+'px'; ring.style.top = ry+'px';
+      requestAnimationFrame(animRing);
+    })();
+    document.querySelectorAll('a, button, .post-item, .visuel-img-wrap').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // Reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Lightbox (posts + stat screenshots)
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+    let lbImages = [], lbIdx = 0;
+
+    function openLightbox(imgs, idx) {
+      lbImages = imgs; lbIdx = idx;
+      lbImg.src = lbImages[lbIdx];
+      lb.classList.add('open');
+    }
+    function closeLightbox() { lb.classList.remove('open'); lbImg.src = ''; }
+    function lbPrev() { lbIdx = (lbIdx - 1 + lbImages.length) % lbImages.length; lbImg.src = lbImages[lbIdx]; }
+    function lbNext() { lbIdx = (lbIdx + 1) % lbImages.length; lbImg.src = lbImages[lbIdx]; }
+
+    // Collect post images
+    const postImgs = Array.from(document.querySelectorAll('.post-item img')).map(i => i.src);
+    document.querySelectorAll('.post-item').forEach((item, i) => {
+      item.addEventListener('click', () => openLightbox(postImgs, i));
+    });
+
+    // Collect stats screenshots
+    const statsImgs = Array.from(document.querySelectorAll('.visuel-img-wrap img')).map(i => i.src);
+    document.querySelectorAll('.visuel-img-wrap').forEach((item, i) => {
+      item.addEventListener('click', () => openLightbox(statsImgs, i));
+    });
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev').addEventListener('click', lbPrev);
+    document.getElementById('lightbox-next').addEventListener('click', lbNext);
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lbPrev();
+      if (e.key === 'ArrowRight') lbNext();
+    });
+  </script>
+
+  <button id="settings-btn" aria-label="Préférences"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <div id="settings-panel">
+    <div class="settings-title">Préférences</div>
+    <div class="settings-row"><span>Curseur personnalisé</span><label class="toggle"><input type="checkbox" id="cursor-toggle" checked><span class="toggle-slider"></span></label></div>
+    <div class="settings-row"><span>Mode clair</span><label class="toggle"><input type="checkbox" id="light-toggle"><span class="toggle-slider"></span></label></div>
+    <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem;"><span>Couleur d'accent</span><div class="color-swatches"><button class="swatch" data-a1="#7c3aed" data-a2="#06b6d4" style="background:linear-gradient(135deg,#7c3aed,#06b6d4)"></button><button class="swatch" data-a1="#e11d48" data-a2="#f97316" style="background:linear-gradient(135deg,#e11d48,#f97316)"></button><button class="swatch" data-a1="#059669" data-a2="#0d9488" style="background:linear-gradient(135deg,#059669,#0d9488)"></button><button class="swatch" data-a1="#2563eb" data-a2="#818cf8" style="background:linear-gradient(135deg,#2563eb,#818cf8)"></button><button class="swatch" data-a1="#db2777" data-a2="#a855f7" style="background:linear-gradient(135deg,#db2777,#a855f7)"></button></div></div>
+  </div>
+  <script>(function(){const btn=document.getElementById('settings-btn'),panel=document.getElementById('settings-panel'),ct=document.getElementById('cursor-toggle'),ce=document.getElementById('cursor'),root=document.documentElement;function ac(a1,a2){root.style.setProperty('--accent1',a1);root.style.setProperty('--accent2',a2);root.style.setProperty('--grad','linear-gradient(135deg,'+a1+','+a2+')');}function sp(k,v){const p=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');p[k]=v;localStorage.setItem('portfolio-prefs',JSON.stringify(p));}const sv=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');if(sv.cursorOff){ct.checked=false;ce.style.display='none';document.body.style.cursor='auto';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor='auto');}if(sv.light){document.getElementById('light-toggle').checked=true;document.body.classList.add('light');}const a1=sv.a1||'#7c3aed',a2=sv.a2||'#06b6d4';ac(a1,a2);document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.a1===a1));btn.addEventListener('click',e=>{e.stopPropagation();panel.classList.toggle('open');});document.addEventListener('click',e=>{if(!panel.contains(e.target)&&e.target!==btn)panel.classList.remove('open');});ct.addEventListener('change',()=>{const off=!ct.checked;ce.style.display=off?'none':'';document.body.style.cursor=off?'auto':'none';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor=off?'auto':'none');sp('cursorOff',off);});document.getElementById('light-toggle').addEventListener('change',function(){document.body.classList.toggle('light',this.checked);sp('light',this.checked);});document.querySelectorAll('.swatch').forEach(s=>{s.addEventListener('click',e=>{e.stopPropagation();ac(s.dataset.a1,s.dataset.a2);document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');sp('a1',s.dataset.a1);sp('a2',s.dataset.a2);});});})();</script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YEAT.ARCHIVE — Thomas Eïto</title>
+  <meta name="description" content="YEAT.ARCHIVE — Archive visuelle dédiée au rappeur Yeat : discographie, clips et quiz interactif. Projet web HTML/CSS/JS par Thomas Eïto." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [role="button"], input, label, select, textarea { cursor: none !important; }
+
+    :root {
+      --bg:      #0a0a0a;
+      --surface: #111111;
+      --surface2:#1a1a1a;
+      --border:  rgba(255,255,255,0.07);
+      --text:    #f0f0f8;
+      --muted:   #6b7280;
+      --accent1: #7c3aed;
+      --accent2: #06b6d4;
+      --grad:    linear-gradient(135deg, var(--accent1), var(--accent2));
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Cursor */
+    #cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; }
+    #cursor .dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; position: absolute; transform: translate(-50%,-50%); }
+    #cursor .ring { width: 36px; height: 36px; border: 1.5px solid rgba(255,255,255,0.6); border-radius: 50%; position: absolute; transform: translate(-50%,-50%); transition: width .3s, height .3s, opacity .3s; }
+    body.cursor-hover #cursor .ring { width: 56px; height: 56px; opacity: 0.5; }
+
+    /* Blobs */
+    .blob-wrap { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(110px); opacity: 0.12; animation: drift 20s ease-in-out infinite alternate; }
+    .blob-1 { width: 500px; height: 500px; background: var(--accent1); top: -150px; left: -150px; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -10s; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(50px,35px) scale(1.08); } }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      backdrop-filter: blur(20px);
+      background: rgba(10,10,10,0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none;
+    }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.85rem; font-weight: 500; color: var(--muted);
+      text-decoration: none; cursor: none;
+      transition: color 0.25s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-back svg { transition: transform 0.25s; }
+    .nav-back:hover svg { transform: translateX(-3px); }
+
+    /* Main */
+    main { position: relative; z-index: 1; }
+
+    /* Hero projet */
+    .project-hero {
+      padding: 10rem 4rem 4rem;
+      max-width: 900px;
+    }
+    .project-back-mobile { display: none; }
+    .project-label {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      line-height: 0.95; margin-bottom: 1.5rem;
+    }
+    .project-title span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .project-meta {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      margin-bottom: 1.8rem;
+    }
+    .tag {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em;
+      padding: 0.3rem 0.7rem; border-radius: 99px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.25);
+      color: #a78bfa;
+    }
+    .tag.cyan {
+      background: rgba(6,182,212,0.12);
+      border-color: rgba(6,182,212,0.25);
+      color: #67e8f9;
+    }
+    .project-desc {
+      font-size: 1.05rem; color: var(--muted); line-height: 1.75;
+      max-width: 620px; font-weight: 300;
+      margin-bottom: 2rem;
+    }
+    .btn-github {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: var(--grad);
+      border: none; border-radius: 99px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem; font-weight: 600;
+      color: #fff; cursor: none; text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 0 30px rgba(124,58,237,0.3);
+    }
+    .btn-github:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(124,58,237,0.5); }
+
+    /* Cover */
+    .cover-wrap {
+      padding: 0 4rem 4rem;
+      display: flex; justify-content: center;
+    }
+    .project-cover {
+      width: 100%; max-width: 1100px;
+      height: auto; display: block;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* Gallery */
+    .gallery-section {
+      padding: 5rem 4rem;
+    }
+    .gallery-label {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent2);
+      margin-bottom: 3rem;
+    }
+    .gallery-grid {
+      display: flex; flex-direction: column; gap: 5rem;
+    }
+    .gallery-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .gallery-item:nth-child(even) .gallery-img-wrap { order: 2; }
+    .gallery-item:nth-child(even) .gallery-text    { order: 1; }
+    .gallery-img-wrap {
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+      cursor: none;
+      transition: box-shadow 0.4s;
+    }
+    .gallery-img-wrap:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.55); }
+    .gallery-img {
+      width: 100%; height: auto; display: block;
+      transition: transform 0.5s ease;
+    }
+    .gallery-img-wrap:hover .gallery-img { transform: scale(1.03); }
+    .gallery-text {}
+    .gallery-page-label {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent2);
+      margin-bottom: 0.6rem;
+    }
+    .gallery-page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .gallery-page-desc {
+      font-size: 0.95rem; color: var(--muted);
+      line-height: 1.75; font-weight: 300;
+    }
+
+    @media (max-width: 900px) {
+      .gallery-item { grid-template-columns: 1fr; gap: 1.5rem; }
+      .gallery-item:nth-child(even) .gallery-img-wrap { order: 0; }
+      .gallery-item:nth-child(even) .gallery-text    { order: 1; }
+      .cover-wrap { padding: 0 1.5rem 3rem; }
+    }
+
+    /* Lightbox */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.92);
+      align-items: center; justify-content: center;
+      cursor: none;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 90vw; max-height: 90vh;
+      border-radius: 12px; object-fit: contain;
+    }
+    #lightbox-close {
+      position: absolute; top: 1.5rem; right: 2rem;
+      font-size: 2rem; color: var(--muted); cursor: none;
+      background: none; border: none; transition: color 0.2s;
+    }
+    #lightbox-close:hover { color: var(--text); }
+
+    /* Footer */
+    footer {
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    footer p { font-size: 0.8rem; color: var(--muted); }
+    .footer-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Light mode */
+    body.light { --bg: #f4f4fc; --surface: #ffffff; --surface2: #ebebf5; --border: rgba(0,0,0,0.09); --text: #0d0d1a; --muted: #5a6272; }
+    body.light .blob { opacity: 0.05; }
+    body.light nav { background: rgba(244,244,252,0.75); border-bottom-color: rgba(0,0,0,0.07); }
+    body.light footer { border-top-color: rgba(0,0,0,0.07); }
+    body.light #cursor { mix-blend-mode: normal; }
+    body.light #cursor .dot { background: #0d0d1a; }
+    body.light #cursor .ring { border-color: rgba(0,0,0,0.45); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .project-hero { padding: 8rem 1.5rem 3rem; }
+      .gallery-section { padding: 3rem 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+    }
+    #settings-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 500; width: 40px; height: 40px; background: var(--surface2); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: none; transition: border-color 0.25s, transform 0.3s; color: var(--muted); }
+    #settings-btn:hover { border-color: rgba(124,58,237,0.5); color: var(--text); transform: rotate(45deg); }
+    #settings-panel { position: fixed; bottom: 5.5rem; right: 2rem; z-index: 500; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.4rem; width: 220px; display: none; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    #settings-panel.open { display: block; }
+    .settings-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; font-size: 0.82rem; color: var(--text); }
+    .settings-row:last-child { margin-bottom: 0; }
+    .toggle { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; transition: background 0.25s; cursor: none; }
+    .toggle-slider::before { content: ''; position: absolute; width: 14px; height: 14px; left: 2px; top: 2px; background: var(--muted); border-radius: 50%; transition: transform 0.25s, background 0.25s; }
+    .toggle input:checked + .toggle-slider { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.4); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent1); }
+    .color-swatches { display: flex; gap: 0.45rem; margin-top: 0.4rem; }
+    .swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: none; transition: transform 0.2s, border-color 0.2s; padding: 0; flex-shrink: 0; }
+    .swatch:hover { transform: scale(1.2); }
+    .swatch.active { border-color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"><div class="ring"></div><div class="dot"></div></div>
+
+
+  <nav>
+    <a href="index.html" class="nav-logo">Portfolio.</a>
+    <a href="index.html" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Retour
+    </a>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <div class="project-hero">
+      <p class="project-label reveal">Projet Web</p>
+      <h1 class="project-title reveal">YEAT<span>.</span><br/>ARCHIVE</h1>
+      <div class="project-meta reveal">
+        <span class="tag">Web Design</span>
+        <span class="tag">UX/UI</span>
+        <span class="tag cyan">HTML / CSS</span>
+        <span class="tag cyan">JavaScript</span>
+      </div>
+      <p class="project-desc reveal">
+        Archive visuelle dédiée au rappeur Yeat : discographie complète, clips, et quiz interactif. Site en accès restreint par liste blanche d'emails.
+      </p>
+      <a href="https://github.com/shmunk1/yeat.archive" target="_blank" class="btn-github reveal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        Voir le GitHub
+      </a>
+    </div>
+
+    <!-- Cover -->
+    <div class="cover-wrap">
+      <img src="images/yeat.archive/site-web.png" alt="Aperçu du site YEAT.ARCHIVE" class="project-cover reveal" />
+    </div>
+
+    <!-- Gallery -->
+    <div class="gallery-section">
+      <p class="gallery-label reveal">Captures d'écran</p>
+      <div class="gallery-grid" id="gallery"></div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span class="footer-logo">Portfolio.</span>
+    <p>© 2026 — Thomas Eïto</p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button id="lightbox-close">✕</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const dot = cursor.querySelector('.dot');
+    const ring = cursor.querySelector('.ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+    (function animRing(){ rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(animRing); })();
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Gallery
+    const gallery = document.getElementById('gallery');
+    const screens = [
+      { file: 'discographie.png', page: 'Discographie', desc: 'Retrouvez l\'intégralité de la discographie de Yeat (albums, mixtapes, EPs, singles et featurings) classée par année de sortie. Chaque projet est directement lié à Spotify pour une écoute immédiate.' },
+      { file: 'clips.png',       page: 'Clips',        desc: 'Tous les clips officiels publiés par l\'artiste sur YouTube, répertoriés et triés par date de mise en ligne. Une barre de recherche permet de retrouver instantanément n\'importe quel clip, avec une redirection directe vers YouTube.' },
+      { file: 'unreleased.png',  page: 'Unreleased',   desc: 'L\'ensemble de la discographie non-officielle de l\'artiste regroupée en un seul endroit. Les sons sont écoutables directement sur le site, sans redirection externe.' },
+      { file: 'recherche.png',   page: 'Recherche',    desc: 'Une barre de recherche globale pour explorer tout le contenu du site en quelques secondes (sons, albums, clips ou projets). Un accès rapide à l\'ensemble du catalogue.' },
+      { file: 'favorites.png',   page: 'Favoris',      desc: 'La possibilité de liker n\'importe quel son du site pour le retrouver dans sa page Favoris personnalisée. Un espace dédié pour centraliser tous ses coups de cœur.' },
+      { file: 'ranking.png',     page: 'Ranking',      desc: 'Créez et partagez vos propres classements personnalisés (sons, albums, projets ou tout autre élément du site). Un outil intuitif pour exprimer et comparer ses préférences.' },
+      { file: 'quiz.png',        page: 'Quiz',         desc: 'Testez vos connaissances sur l\'univers de Yeat à travers des blind tests avec plusieurs niveaux de difficulté. Un format ludique pour les fans les plus pointus.' },
+    ];
+    screens.forEach((s, idx) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item reveal';
+      item.innerHTML = `
+        <div class="gallery-img-wrap">
+          <img loading="lazy" src="images/yeat.archive/${s.file}" alt="${s.page}" class="gallery-img" />
+        </div>
+        <div class="gallery-text">
+          <p class="gallery-page-label">Page ${idx + 1}</p>
+          <h3 class="gallery-page-title">${s.page}</h3>
+          <p class="gallery-page-desc">${s.desc}</p>
+        </div>`;
+      item.querySelector('.gallery-img-wrap').addEventListener('click', () => openLightbox(`images/yeat.archive/${s.file}`));
+      item.querySelector('.gallery-img-wrap').addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      item.querySelector('.gallery-img-wrap').addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      gallery.appendChild(item);
+      observer.observe(item);
+    });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    function openLightbox(src) { lightboxImg.src = src; lightbox.classList.add('open'); }
+    document.getElementById('lightbox-close').addEventListener('click', () => lightbox.classList.remove('open'));
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
+  </script>
+
+  <button id="settings-btn" aria-label="Préférences"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <div id="settings-panel">
+    <div class="settings-title">Préférences</div>
+    <div class="settings-row"><span>Curseur personnalisé</span><label class="toggle"><input type="checkbox" id="cursor-toggle" checked><span class="toggle-slider"></span></label></div>
+    <div class="settings-row"><span>Mode clair</span><label class="toggle"><input type="checkbox" id="light-toggle"><span class="toggle-slider"></span></label></div>
+    <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem;"><span>Couleur d'accent</span><div class="color-swatches"><button class="swatch" data-a1="#7c3aed" data-a2="#06b6d4" style="background:linear-gradient(135deg,#7c3aed,#06b6d4)"></button><button class="swatch" data-a1="#e11d48" data-a2="#f97316" style="background:linear-gradient(135deg,#e11d48,#f97316)"></button><button class="swatch" data-a1="#059669" data-a2="#0d9488" style="background:linear-gradient(135deg,#059669,#0d9488)"></button><button class="swatch" data-a1="#2563eb" data-a2="#818cf8" style="background:linear-gradient(135deg,#2563eb,#818cf8)"></button><button class="swatch" data-a1="#db2777" data-a2="#a855f7" style="background:linear-gradient(135deg,#db2777,#a855f7)"></button></div></div>
+  </div>
+  <script>(function(){const btn=document.getElementById('settings-btn'),panel=document.getElementById('settings-panel'),ct=document.getElementById('cursor-toggle'),ce=document.getElementById('cursor'),root=document.documentElement;function ac(a1,a2){root.style.setProperty('--accent1',a1);root.style.setProperty('--accent2',a2);root.style.setProperty('--grad','linear-gradient(135deg,'+a1+','+a2+')');}function sp(k,v){const p=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');p[k]=v;localStorage.setItem('portfolio-prefs',JSON.stringify(p));}const sv=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');if(sv.cursorOff){ct.checked=false;ce.style.display='none';document.body.style.cursor='auto';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor='auto');}if(sv.light){document.getElementById('light-toggle').checked=true;document.body.classList.add('light');}const a1=sv.a1||'#7c3aed',a2=sv.a2||'#06b6d4';ac(a1,a2);document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.a1===a1));btn.addEventListener('click',e=>{e.stopPropagation();panel.classList.toggle('open');});document.addEventListener('click',e=>{if(!panel.contains(e.target)&&e.target!==btn)panel.classList.remove('open');});ct.addEventListener('change',()=>{const off=!ct.checked;ce.style.display=off?'none':'';document.body.style.cursor=off?'auto':'none';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor=off?'auto':'none');sp('cursorOff',off);});document.getElementById('light-toggle').addEventListener('change',function(){document.body.classList.toggle('light',this.checked);sp('light',this.checked);});document.querySelectorAll('.swatch').forEach(s=>{s.addEventListener('click',e=>{e.stopPropagation();ac(s.dataset.a1,s.dataset.a2);document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');sp('a1',s.dataset.a1);sp('a2',s.dataset.a2);});});})();</script>
+</body>
+</html>

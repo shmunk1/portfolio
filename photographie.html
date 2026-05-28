@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photographie — Thomas Eïto</title>
+  <meta name="description" content="Studio Portraits — Projet photographique réalisé à l'YNOV : reproduction de poses iconiques transformées en pop art par IA. Par Thomas Eïto." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [role="button"], input, label, select, textarea { cursor: none !important; }
+    :root {
+      --bg:      #0a0a0a;
+      --surface: #111111;
+      --surface2:#1a1a1a;
+      --border:  rgba(255,255,255,0.07);
+      --text:    #f0f0f8;
+      --muted:   #6b7280;
+      --accent1: #7c3aed;
+      --accent2: #06b6d4;
+      --grad:    linear-gradient(135deg, var(--accent1), var(--accent2));
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text);
+      overflow-x: hidden; cursor: none;
+    }
+
+    /* Cursor */
+    #cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; }
+    #cursor .dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; position: absolute; transform: translate(-50%,-50%); }
+    #cursor .ring { width: 36px; height: 36px; border: 1.5px solid rgba(255,255,255,0.6); border-radius: 50%; position: absolute; transform: translate(-50%,-50%); transition: width .3s, height .3s, opacity .3s; }
+    body.cursor-hover #cursor .ring { width: 56px; height: 56px; opacity: 0.5; }
+
+    /* Blobs */
+    .blob-wrap { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(110px); opacity: 0.1; animation: drift 20s ease-in-out infinite alternate; }
+    .blob-1 { width: 500px; height: 500px; background: var(--accent1); top: -150px; left: -150px; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -10s; }
+    @keyframes drift { from { transform: translate(0,0); } to { transform: translate(50px,35px); } }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      backdrop-filter: blur(20px);
+      background: rgba(10,10,10,0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none;
+    }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.85rem; font-weight: 500; color: var(--muted);
+      text-decoration: none; cursor: none; transition: color 0.25s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-back:hover svg { transform: translateX(-3px); }
+    .nav-back svg { transition: transform 0.25s; }
+
+    /* Main */
+    main { position: relative; z-index: 1; }
+
+    /* Hero */
+    .project-hero {
+      padding: 10rem 4rem 4rem;
+      max-width: 860px;
+    }
+    .project-label {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent2); margin-bottom: 1rem;
+    }
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 0.95;
+      margin-bottom: 1.5rem;
+    }
+    .project-title span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .project-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.8rem; }
+    .tag {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em;
+      padding: 0.3rem 0.7rem; border-radius: 99px;
+      background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25); color: #a78bfa;
+    }
+    .tag.cyan { background: rgba(6,182,212,0.12); border-color: rgba(6,182,212,0.25); color: #67e8f9; }
+    .project-desc {
+      font-size: 1.05rem; color: var(--muted); line-height: 1.75;
+      max-width: 580px; font-weight: 300;
+    }
+
+    /* Gallery */
+    .gallery-section { padding: 4rem 4rem 8rem; }
+    .gallery-label {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent2); margin-bottom: 2.5rem;
+    }
+
+    /* 2-column photo grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .gallery-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .gallery-img-wrap {
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      cursor: none;
+      transition: box-shadow 0.4s;
+    }
+    .gallery-img-wrap:hover { box-shadow: 0 16px 50px rgba(0,0,0,0.55); }
+    .gallery-img {
+      width: 100%; height: auto; display: block;
+      transition: transform 0.5s ease;
+    }
+    .gallery-img-wrap:hover .gallery-img { transform: scale(1.04); }
+    .gallery-text { padding: 0 0.25rem; }
+    .gallery-page-label {
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent2);
+      margin-bottom: 0.3rem;
+    }
+    .gallery-page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 0.3rem;
+    }
+    .gallery-page-desc {
+      font-size: 0.85rem; color: var(--muted);
+      line-height: 1.6; font-weight: 300;
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Lightbox */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.95);
+      align-items: center; justify-content: center;
+      cursor: none;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 88vw; max-height: 88vh;
+      border-radius: 10px; object-fit: contain;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+    }
+    #lightbox-close {
+      position: absolute; top: 1.5rem; right: 2rem;
+      font-size: 1.8rem; color: var(--muted); cursor: none;
+      background: none; border: none; transition: color 0.2s;
+      line-height: 1;
+    }
+    #lightbox-close:hover { color: var(--text); }
+    #lightbox-prev, #lightbox-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      color: var(--text); cursor: none; border-radius: 50%;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    #lightbox-prev { left: 1.5rem; }
+    #lightbox-next { right: 1.5rem; }
+    #lightbox-prev:hover, #lightbox-next:hover { background: rgba(255,255,255,0.15); }
+
+    /* Footer */
+    footer {
+      padding: 2rem 4rem; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    footer p { font-size: 0.8rem; color: var(--muted); }
+    .footer-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Light mode */
+    body.light { --bg: #f4f4fc; --surface: #ffffff; --surface2: #ebebf5; --border: rgba(0,0,0,0.09); --text: #0d0d1a; --muted: #5a6272; }
+    body.light .blob { opacity: 0.05; }
+    body.light nav { background: rgba(244,244,252,0.75); border-bottom-color: rgba(0,0,0,0.07); }
+    body.light footer { border-top-color: rgba(0,0,0,0.07); }
+    body.light #cursor { mix-blend-mode: normal; }
+    body.light #cursor .dot { background: #0d0d1a; }
+    body.light #cursor .ring { border-color: rgba(0,0,0,0.45); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .project-hero { padding: 8rem 1.5rem 3rem; }
+      .gallery-section { padding: 3rem 1.5rem 5rem; }
+
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+    }
+    #settings-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 500; width: 40px; height: 40px; background: var(--surface2); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: none; transition: border-color 0.25s, transform 0.3s; color: var(--muted); }
+    #settings-btn:hover { border-color: rgba(124,58,237,0.5); color: var(--text); transform: rotate(45deg); }
+    #settings-panel { position: fixed; bottom: 5.5rem; right: 2rem; z-index: 500; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.4rem; width: 220px; display: none; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    #settings-panel.open { display: block; }
+    .settings-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; font-size: 0.82rem; color: var(--text); }
+    .settings-row:last-child { margin-bottom: 0; }
+    .toggle { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; transition: background 0.25s; cursor: none; }
+    .toggle-slider::before { content: ''; position: absolute; width: 14px; height: 14px; left: 2px; top: 2px; background: var(--muted); border-radius: 50%; transition: transform 0.25s, background 0.25s; }
+    .toggle input:checked + .toggle-slider { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.4); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent1); }
+    .color-swatches { display: flex; gap: 0.45rem; margin-top: 0.4rem; }
+    .swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: none; transition: transform 0.2s, border-color 0.2s; padding: 0; flex-shrink: 0; }
+    .swatch:hover { transform: scale(1.2); }
+    .swatch.active { border-color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"><div class="ring"></div><div class="dot"></div></div>
+
+
+  <nav>
+    <a href="index.html" class="nav-logo">Portfolio.</a>
+    <a href="index.html" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Retour
+    </a>
+  </nav>
+
+  <main>
+    <div class="project-hero">
+      <p class="project-label reveal">Projet Photographique</p>
+      <h1 class="project-title reveal">Studio<br/><span>Portraits</span></h1>
+      <div class="project-meta reveal">
+        <span class="tag">Photographie</span>
+        <span class="tag">Portrait</span>
+        <span class="tag cyan">Studio</span>
+        <span class="tag cyan">Canon</span>
+      </div>
+      <p class="project-desc reveal">
+        Projet de groupe réalisé en studio dans le cadre de mes études à l'YNOV. L'objectif était de reproduire des poses iconiques de la culture populaire, puis de transformer ces portraits en œuvres style pop art grâce à l'intelligence artificielle.
+      </p>
+    </div>
+
+    <div class="gallery-section">
+      <p class="gallery-label reveal">Galerie</p>
+      <div class="gallery-grid">
+
+        <div class="gallery-item reveal">
+          <div class="gallery-img-wrap">
+            <img loading="lazy" src="images/photo/0073.jpg" alt="Représentation de Britney Spears" class="gallery-img" />
+          </div>
+          <div class="gallery-text">
+            <p class="gallery-page-label">Portrait 1</p>
+            <h3 class="gallery-page-title">Britney Spears</h3>
+            <p class="gallery-page-desc">Représentation de Britney Spears</p>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-img-wrap">
+            <img loading="lazy" src="images/photo/0087.jpg" alt="Représentation de Charlie Chaplin" class="gallery-img" />
+          </div>
+          <div class="gallery-text">
+            <p class="gallery-page-label">Portrait 2</p>
+            <h3 class="gallery-page-title">Charlie Chaplin</h3>
+            <p class="gallery-page-desc">Représentation de Charlie Chaplin</p>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-img-wrap">
+            <img loading="lazy" src="images/photo/0103.jpg" alt="Représentation de Albert Einstein" class="gallery-img" />
+          </div>
+          <div class="gallery-text">
+            <p class="gallery-page-label">Portrait 3</p>
+            <h3 class="gallery-page-title">Albert Einstein</h3>
+            <p class="gallery-page-desc">Représentation de Albert Einstein</p>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-img-wrap">
+            <img loading="lazy" src="images/photo/0184.jpg" alt="Représentation de Michael Jackson" class="gallery-img" />
+          </div>
+          <div class="gallery-text">
+            <p class="gallery-page-label">Portrait 4</p>
+            <h3 class="gallery-page-title">Michael Jackson</h3>
+            <p class="gallery-page-desc">Représentation de Michael Jackson</p>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal" style="grid-column: 1 / -1; max-width: calc(50% - 1rem);">
+          <div class="gallery-img-wrap">
+            <img loading="lazy" src="images/photo/0244.jpg" alt="Représentation de Marilyn Monroe" class="gallery-img" />
+          </div>
+          <div class="gallery-text">
+            <p class="gallery-page-label">Portrait 5</p>
+            <h3 class="gallery-page-title">Marilyn Monroe</h3>
+            <p class="gallery-page-desc">Représentation de Marilyn Monroe</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-logo">Portfolio.</span>
+    <p>© 2026 — Thomas Eïto</p>
+  </footer>
+
+  <div id="lightbox">
+    <button id="lightbox-close">✕</button>
+    <button id="lightbox-prev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <img id="lightbox-img" src="" alt="" />
+    <button id="lightbox-next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+  </div>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const dot = cursor.querySelector('.dot'), ring = cursor.querySelector('.ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+    (function loop(){ rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(loop); })();
+    document.querySelectorAll('a, button, .gallery-img-wrap').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // Reveal
+    const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Lightbox
+    const photos = Array.from(document.querySelectorAll('.gallery-img-wrap img')).map(i => i.src);
+    let current = 0;
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+
+    function openLightbox(idx) { current = idx; lbImg.src = photos[current]; lb.classList.add('open'); }
+    function closeLightbox() { lb.classList.remove('open'); }
+    function prev() { current = (current - 1 + photos.length) % photos.length; lbImg.src = photos[current]; }
+    function next() { current = (current + 1) % photos.length; lbImg.src = photos[current]; }
+
+    document.querySelectorAll('.gallery-img-wrap').forEach((item, idx) => item.addEventListener('click', () => openLightbox(idx)));
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev').addEventListener('click', prev);
+    document.getElementById('lightbox-next').addEventListener('click', next);
+    lb.addEventListener('click', e => { if(e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape') closeLightbox();
+      if(e.key === 'ArrowLeft') prev();
+      if(e.key === 'ArrowRight') next();
+    });
+  </script>
+
+  <button id="settings-btn" aria-label="Préférences"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <div id="settings-panel">
+    <div class="settings-title">Préférences</div>
+    <div class="settings-row"><span>Curseur personnalisé</span><label class="toggle"><input type="checkbox" id="cursor-toggle" checked><span class="toggle-slider"></span></label></div>
+    <div class="settings-row"><span>Mode clair</span><label class="toggle"><input type="checkbox" id="light-toggle"><span class="toggle-slider"></span></label></div>
+    <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem;"><span>Couleur d'accent</span><div class="color-swatches"><button class="swatch" data-a1="#7c3aed" data-a2="#06b6d4" style="background:linear-gradient(135deg,#7c3aed,#06b6d4)"></button><button class="swatch" data-a1="#e11d48" data-a2="#f97316" style="background:linear-gradient(135deg,#e11d48,#f97316)"></button><button class="swatch" data-a1="#059669" data-a2="#0d9488" style="background:linear-gradient(135deg,#059669,#0d9488)"></button><button class="swatch" data-a1="#2563eb" data-a2="#818cf8" style="background:linear-gradient(135deg,#2563eb,#818cf8)"></button><button class="swatch" data-a1="#db2777" data-a2="#a855f7" style="background:linear-gradient(135deg,#db2777,#a855f7)"></button></div></div>
+  </div>
+  <script>(function(){const btn=document.getElementById('settings-btn'),panel=document.getElementById('settings-panel'),ct=document.getElementById('cursor-toggle'),ce=document.getElementById('cursor'),root=document.documentElement;function ac(a1,a2){root.style.setProperty('--accent1',a1);root.style.setProperty('--accent2',a2);root.style.setProperty('--grad','linear-gradient(135deg,'+a1+','+a2+')');}function sp(k,v){const p=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');p[k]=v;localStorage.setItem('portfolio-prefs',JSON.stringify(p));}const sv=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');if(sv.cursorOff){ct.checked=false;ce.style.display='none';document.body.style.cursor='auto';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor='auto');}if(sv.light){document.getElementById('light-toggle').checked=true;document.body.classList.add('light');}const a1=sv.a1||'#7c3aed',a2=sv.a2||'#06b6d4';ac(a1,a2);document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.a1===a1));btn.addEventListener('click',e=>{e.stopPropagation();panel.classList.toggle('open');});document.addEventListener('click',e=>{if(!panel.contains(e.target)&&e.target!==btn)panel.classList.remove('open');});ct.addEventListener('change',()=>{const off=!ct.checked;ce.style.display=off?'none':'';document.body.style.cursor=off?'auto':'none';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor=off?'auto':'none');sp('cursorOff',off);});document.getElementById('light-toggle').addEventListener('change',function(){document.body.classList.toggle('light',this.checked);sp('light',this.checked);});document.querySelectorAll('.swatch').forEach(s=>{s.addEventListener('click',e=>{e.stopPropagation();ac(s.dataset.a1,s.dataset.a2);document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');sp('a1',s.dataset.a1);sp('a2',s.dataset.a2);});});})();</script>
+</body>
+</html>
