@@ -541,6 +541,9 @@
     #back-top { position: fixed; bottom: 2rem; left: 2rem; z-index: 500; width: 40px; height: 40px; background: var(--surface2); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: none; opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s, border-color 0.25s, color 0.25s; color: var(--muted); }
     #back-top.visible { opacity: 1; pointer-events: auto; }
     #back-top:hover { border-color: rgba(124,58,237,0.5); color: var(--text); transform: translateY(-3px); }
+  
+    body.cursor-off, body.cursor-off * { cursor: auto !important; }
+    body.cursor-off a, body.cursor-off button, body.cursor-off [role="button"], body.cursor-off label, body.cursor-off .card-full-link, body.cursor-off .gallery-img-wrap, body.cursor-off .swatch, body.cursor-off .toggle-slider { cursor: pointer !important; }
   </style>
 </head>
 <body>
@@ -584,6 +587,26 @@
     <div class="reveal reveal-delay-1"><h2 class="section-title">Mes <span>projets</span></h2></div>
     <div class="reveal reveal-delay-2"><div class="section-divider"></div></div>
     <div class="projects-grid">
+
+      <div class="project-card reveal reveal-delay-1">
+        <a href="saint-archive.html" class="card-full-link" aria-label="Voir 1300SAINT.ARCHIVE"></a>
+        <div class="project-thumb" style="background:#0a0a0a; overflow:hidden;">
+          <img src="images/saint.archive/site-web.jpg" alt="1300SAINT.ARCHIVE" style="width:100%;height:100%;object-fit:cover;opacity:0.9;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
+          <div class="project-overlay"></div>
+        </div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Web Design</span>
+            <span class="tag cyan">HTML / CSS / JS</span>
+          </div>
+          <h3 class="project-name">1300SAINT.ARCHIVE</h3>
+          <p class="project-desc">Site fan non officiel dédié à 1300SAINT (discographie, clips et direction artistique gothique).</p>
+          <a href="saint-archive.html" class="project-link">
+            Voir le projet
+            <svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
 
       <div class="project-card reveal reveal-delay-1">
         <a href="yeat-archive.html" class="card-full-link" aria-label="Voir YEAT.ARCHIVE"></a>
@@ -804,7 +827,7 @@
     })();
 
     // Settings
-    (function(){const btn=document.getElementById('settings-btn'),panel=document.getElementById('settings-panel'),ct=document.getElementById('cursor-toggle'),ce=document.getElementById('cursor'),root=document.documentElement;function ac(a1,a2){root.style.setProperty('--accent1',a1);root.style.setProperty('--accent2',a2);root.style.setProperty('--grad','linear-gradient(135deg,'+a1+','+a2+')');}function sp(k,v){const p=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');p[k]=v;localStorage.setItem('portfolio-prefs',JSON.stringify(p));}const sv=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');if(sv.cursorOff){ct.checked=false;ce.style.display='none';document.body.style.cursor='auto';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor='auto');}const a1=sv.a1||'#7c3aed',a2=sv.a2||'#06b6d4';ac(a1,a2);document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.a1===a1));btn.addEventListener('click',e=>{e.stopPropagation();panel.classList.toggle('open');});document.addEventListener('click',e=>{if(!panel.contains(e.target)&&e.target!==btn)panel.classList.remove('open');});ct.addEventListener('change',()=>{const off=!ct.checked;ce.style.display=off?'none':'';document.body.style.cursor=off?'auto':'none';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor=off?'auto':'none');sp('cursorOff',off);});if(sv.light){document.getElementById('light-toggle').checked=true;document.body.classList.add('light');}document.getElementById('light-toggle').addEventListener('change',function(){document.body.classList.toggle('light',document.getElementById('light-toggle').checked);sp('light',document.getElementById('light-toggle').checked);});document.querySelectorAll('.swatch').forEach(s=>{s.addEventListener('click',e=>{e.stopPropagation();ac(s.dataset.a1,s.dataset.a2);document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');sp('a1',s.dataset.a1);sp('a2',s.dataset.a2);});});})();
+    (function(){const btn=document.getElementById('settings-btn'),panel=document.getElementById('settings-panel'),ct=document.getElementById('cursor-toggle'),ce=document.getElementById('cursor'),root=document.documentElement;function ac(a1,a2){root.style.setProperty('--accent1',a1);root.style.setProperty('--accent2',a2);root.style.setProperty('--grad','linear-gradient(135deg,'+a1+','+a2+')');}function sp(k,v){const p=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');p[k]=v;localStorage.setItem('portfolio-prefs',JSON.stringify(p));}const sv=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}');if(sv.cursorOff){ct.checked=false;document.body.classList.add('cursor-off');ce.style.display='none';document.body.style.cursor='auto';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor='auto');}const a1=sv.a1||'#7c3aed',a2=sv.a2||'#06b6d4';ac(a1,a2);document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.a1===a1));btn.addEventListener('click',e=>{e.stopPropagation();panel.classList.toggle('open');});document.addEventListener('click',e=>{if(!panel.contains(e.target)&&e.target!==btn)panel.classList.remove('open');});ct.addEventListener('change',()=>{const off=!ct.checked;ce.style.display=off?'none':'';document.body.classList.toggle('cursor-off',off);document.body.style.cursor=off?'auto':'none';document.querySelectorAll('a,button,[role="button"]').forEach(el=>el.style.cursor=off?'auto':'none');sp('cursorOff',off);});if(sv.light){document.getElementById('light-toggle').checked=true;document.body.classList.add('light');}document.getElementById('light-toggle').addEventListener('change',function(){document.body.classList.toggle('light',document.getElementById('light-toggle').checked);sp('light',document.getElementById('light-toggle').checked);});document.querySelectorAll('.swatch').forEach(s=>{s.addEventListener('click',e=>{e.stopPropagation();ac(s.dataset.a1,s.dataset.a2);document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');sp('a1',s.dataset.a1);sp('a2',s.dataset.a2);});});})();
   </script>
 </body>
 </html>
