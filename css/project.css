@@ -78,8 +78,8 @@
   transition: box-shadow 0.4s;
 }
 .visuel-img-wrap:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.55); }
-.visuel-img-wrap img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
-.visuel-img-wrap:hover img { transform: scale(1.03); }
+.visuel-img-wrap img, .visuel-img-wrap video { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
+.visuel-img-wrap:hover img, .visuel-img-wrap:hover video { transform: scale(1.03); }
 .visuel-num {
   font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em;
   text-transform: uppercase; color: var(--accent2);

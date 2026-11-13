@@ -51,6 +51,14 @@ const revealObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+// ── Vidéos de démo : lecture seulement quand visibles ─
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const videoObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause());
+  }, { threshold: 0.3 });
+  document.querySelectorAll('video[loop]').forEach(v => videoObserver.observe(v));
+}
+
 // ── Nav réduite au scroll + bouton retour en haut ─
 const nav = document.querySelector('nav');
 document.body.insertAdjacentHTML('beforeend', `
@@ -124,7 +132,7 @@ if (finePointer && !reducedMotion) {
 }
 
 // ── Lightbox ─────────────────────────────────────
-const zoomables = [...document.querySelectorAll('.visuel-img-wrap, .post-item')];
+const zoomables = [...document.querySelectorAll('.visuel-img-wrap, .post-item')].filter(z => z.querySelector('img'));
 if (zoomables.length) {
   document.body.insertAdjacentHTML('beforeend', `
     <dialog id="lightbox" aria-label="Image agrandie">
