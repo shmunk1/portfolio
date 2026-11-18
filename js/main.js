@@ -31,7 +31,13 @@ if (finePointer) {
   const dot = cursor.querySelector('.dot'), ring = cursor.querySelector('.ring');
   let mx = -200, my = -200, rx = -200, ry = -200;
   dot.style.left = dot.style.top = '-200px';
+  // Sur la barre de défilement, le navigateur reprend sa flèche et n'envoie plus rien pendant
+  // le glisser : on masque le curseur rond plutôt que de le laisser figé à côté
+  const onScrollbar = e => e.clientX >= root.clientWidth || e.clientY >= root.clientHeight;
+  const hideCursor = () => cursor.classList.add('out');
+  document.addEventListener('mousedown', e => { if (onScrollbar(e)) hideCursor(); });
   document.addEventListener('mousemove', e => {
+    if (onScrollbar(e)) return hideCursor();
     mx = e.clientX; my = e.clientY;
     // Retour dans la page : l'anneau repart de la souris au lieu de traverser l'écran
     if (cursor.classList.contains('out')) { rx = mx; ry = my; cursor.classList.remove('out'); }
@@ -43,8 +49,8 @@ if (finePointer) {
     requestAnimationFrame(animRing);
   })();
   // La souris quitte la fenêtre : le curseur disparaît au lieu de rester figé au bord
-  document.addEventListener('mouseout', e => { if (!e.relatedTarget) cursor.classList.add('out'); });
-  window.addEventListener('blur', () => cursor.classList.add('out'));
+  document.addEventListener('mouseout', e => { if (!e.relatedTarget) hideCursor(); });
+  window.addEventListener('blur', hideCursor);
   const HOVERABLE = 'a, button, label, .chip, .zoomable';
   document.addEventListener('mouseover', e => {
     document.body.classList.toggle('cursor-hover', !!e.target.closest(HOVERABLE));
