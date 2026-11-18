@@ -96,18 +96,6 @@
 .ratio-1-1 { aspect-ratio: 1 / 1; }
 .ratio-3-4 img, .ratio-1-1 img { height: 100%; object-fit: cover; }
 
-/* Photographie : grille de portraits */
-.visuel-list.portraits {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
-  max-width: 720px; margin: 0 auto;
-}
-.portraits .visuel-item { display: flex; flex-direction: column; align-items: stretch; gap: 1rem; }
-.portraits .visuel-item .visuel-img-wrap, .portraits .visuel-item .visuel-text { order: 0; }
-.portraits .visuel-item:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: calc(50% - 2.5rem); }
-.portraits .visuel-name { font-size: 1.1rem; margin-bottom: 0.3rem; }
-.portraits .visuel-num { margin-bottom: 0.3rem; }
-.portraits .visuel-desc { font-size: 0.85rem; line-height: 1.6; }
-
 /* ── Chiffres ─────────────────────────────────── */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; margin-bottom: 1rem; }
 .stat-card {
@@ -174,8 +162,6 @@
   .project-hero { padding: 8rem 1.5rem 3rem; }
   .gallery-section, .content-section { padding: 3rem 1.5rem; }
   .features-section { padding: 2rem 1.5rem 3rem; }
-  .visuel-list.portraits { grid-template-columns: 1fr; gap: 3rem; }
-  .portraits .visuel-item:last-child:nth-child(odd) { max-width: none; }
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat-card { padding: 1.2rem 1rem; }
   .project-title { font-size: 9.5vw; }
