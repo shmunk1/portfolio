@@ -34,6 +34,9 @@ body {
   animation: pageIn 0.4s cubic-bezier(0.23,1,0.32,1) both;
 }
 main { position: relative; z-index: 1; }
+/* Pas de sélection de texte, ni de menu ou de glisser-déposer sur les images (aussi au toucher long sur mobile) */
+html { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+img, video { -webkit-user-drag: none; }
 :focus-visible { outline: 2px solid var(--accent2); outline-offset: 3px; }
 
 .nav-logo, .footer-logo, .stat-value, .hero-name span, .section-title span, .project-title span {

@@ -13,6 +13,10 @@ function savePref(key, value) {
 }
 const prefs = loadPrefs();
 
+// ── Protection du contenu : pas de clic droit, de sélection, de copie ni de glisser-déposer ─
+['contextmenu', 'selectstart', 'copy', 'cut', 'dragstart'].forEach(type =>
+  document.addEventListener(type, e => e.preventDefault()));
+
 // ── Curseur personnalisé (souris uniquement) ─────
 let cursor = null;
 function setCursor(on) {
