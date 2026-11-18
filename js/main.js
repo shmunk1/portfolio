@@ -131,7 +131,7 @@ window.addEventListener('pageshow', () => document.body.classList.remove('page-o
 
 // ── Inclinaison des cartes projet ────────────────
 if (finePointer && !reducedMotion) {
-  document.querySelectorAll('.project-card').forEach(card => {
+  document.querySelectorAll('.project-card:not(.wip)').forEach(card => {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();
       const x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2;
