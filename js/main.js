@@ -33,6 +33,8 @@ if (finePointer) {
   dot.style.left = dot.style.top = '-200px';
   document.addEventListener('mousemove', e => {
     mx = e.clientX; my = e.clientY;
+    // Retour dans la page : l'anneau repart de la souris au lieu de traverser l'écran
+    if (cursor.classList.contains('out')) { rx = mx; ry = my; cursor.classList.remove('out'); }
     dot.style.left = mx + 'px'; dot.style.top = my + 'px';
   });
   (function animRing() {
@@ -40,6 +42,9 @@ if (finePointer) {
     ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
     requestAnimationFrame(animRing);
   })();
+  // La souris quitte la fenêtre : le curseur disparaît au lieu de rester figé au bord
+  document.addEventListener('mouseout', e => { if (!e.relatedTarget) cursor.classList.add('out'); });
+  window.addEventListener('blur', () => cursor.classList.add('out'));
   const HOVERABLE = 'a, button, label, .chip, .zoomable';
   document.addEventListener('mouseover', e => {
     document.body.classList.toggle('cursor-hover', !!e.target.closest(HOVERABLE));
