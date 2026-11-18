@@ -17,7 +17,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/home.css" />
-  <script>(function(d){d.classList.add('js');try{if(JSON.parse(localStorage.getItem('portfolio-prefs')||'{}').light)d.classList.add('light')}catch(e){}})(document.documentElement)</script>
+  <script>(function(d){d.classList.add('js');var l;try{l=JSON.parse(localStorage.getItem('portfolio-prefs')||'{}').light}catch(e){}if(l===undefined)l=matchMedia('(prefers-color-scheme: light)').matches;if(l)d.classList.add('light')})(document.documentElement)</script>
   <script src="js/main.js" defer></script>
 </head>
 <body>

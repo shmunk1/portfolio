@@ -97,6 +97,12 @@ lightToggle.addEventListener('change', () => {
   root.classList.toggle('light', lightToggle.checked);
   savePref('light', lightToggle.checked);
 });
+// Sans choix enregistré, le thème suit celui du système, même s'il change en cours de visite
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+  if (loadPrefs().light !== undefined) return;
+  root.classList.toggle('light', e.matches);
+  lightToggle.checked = e.matches;
+});
 const cursorToggle = document.getElementById('cursor-toggle');
 if (cursorToggle) {
   cursorToggle.checked = !prefs.cursorOff;
