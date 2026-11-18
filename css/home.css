@@ -58,16 +58,6 @@ section { position: relative; z-index: 1; scroll-margin-top: 4rem; }
   opacity: 0; transform: translateY(20px);
   animation: fadeUp 0.8s 0.65s ease forwards;
 }
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  background: transparent;
-  border: 1px solid var(--border); border-radius: 99px;
-  font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
-  color: var(--muted); text-decoration: none;
-  transition: border-color 0.25s ease, color 0.25s ease;
-}
-.btn-ghost:hover { border-color: rgba(127,127,127,0.5); color: var(--text); }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
 /* ── Titres de section ────────────────────────── */

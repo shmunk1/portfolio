@@ -87,6 +87,18 @@ html.light nav { background: rgba(244,244,252,0.75); }
 }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(124,58,237,0.5); }
 
+/* ── Bouton secondaire ────────────────────────── */
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: transparent;
+  border: 1px solid var(--border); border-radius: 99px;
+  font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
+  color: var(--muted); text-decoration: none;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.btn-ghost:hover { border-color: rgba(127,127,127,0.5); color: var(--text); }
+
 /* ── Footer ───────────────────────────────────── */
 footer {
   padding: 2rem 4rem;
