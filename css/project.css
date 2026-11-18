@@ -37,7 +37,7 @@
   text-decoration: none;
   transition: border-color 0.3s, color 0.3s, background 0.3s;
 }
-.social-btn:hover { border-color: rgba(124,58,237,0.5); color: var(--text); background: rgba(124,58,237,0.07); }
+.social-btn:hover { border-color: rgba(220,38,38,0.5); color: var(--text); background: rgba(220,38,38,0.07); }
 .social-btn svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
 
 /* ── Couverture ───────────────────────────────── */
@@ -105,7 +105,7 @@
   padding: 1.6rem 1.4rem;
   transition: border-color 0.3s, transform 0.3s;
 }
-.stat-card:hover { border-color: rgba(124,58,237,0.35); transform: translateY(-3px); }
+.stat-card:hover { border-color: rgba(220,38,38,0.35); transform: translateY(-3px); }
 .stat-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.4rem; }
 .stat-label { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
 
@@ -177,7 +177,7 @@
   color: var(--text); text-decoration: none;
   transition: border-color 0.3s, transform 0.3s;
 }
-.project-nav-link:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-3px); }
+.project-nav-link:hover { border-color: rgba(220,38,38,0.4); transform: translateY(-3px); }
 .project-nav-link.next { align-items: flex-end; text-align: right; }
 .project-nav-dir { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .project-nav-name { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; }
