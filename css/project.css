@@ -17,9 +17,9 @@
 }
 .project-label { margin-bottom: 1rem; }
 .project-title {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--display);
   font-size: clamp(2.8rem, 7vw, 6rem);
-  font-weight: 800; letter-spacing: -0.03em; line-height: 0.95;
+  font-weight: 800; letter-spacing: 0; line-height: 1.12;
   margin-bottom: 1.5rem;
   overflow-wrap: anywhere;
 }
@@ -56,14 +56,14 @@
 .content-section:last-of-type { padding-bottom: 8rem; }
 .section-header { margin-bottom: 3.5rem; }
 .section-label { margin-bottom: 0.5rem; }
-.section-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
+.section-title { font-family: var(--display); font-size: 1.6rem; font-weight: 700; letter-spacing: 0; }
 
 /* ── Cartes d'information ─────────────────────── */
 .features-section { padding: 2rem 4rem 5rem; }
 .features-section.facts { padding-top: 0; padding-bottom: 3rem; }
 .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 1.2rem; }
 .feat { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
-.feat h2, .feat h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: .6rem; }
+.feat h2, .feat h3 { font-family: 'Inter', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: .6rem; }
 .feat p { font-size: .9rem; color: var(--muted); line-height: 1.7; font-weight: 300; }
 
 /* ── Image + texte ────────────────────────────── */
@@ -85,7 +85,7 @@
   text-transform: uppercase; color: var(--accent2);
   margin-bottom: 0.6rem;
 }
-.visuel-name { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.visuel-name { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 1rem; }
 .visuel-desc { font-size: 0.95rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
 
 /* AGS : image plus étroite que le texte */
@@ -106,7 +106,7 @@
   transition: border-color 0.3s, transform 0.3s;
 }
 .stat-card:hover { border-color: rgba(220,38,38,0.35); transform: translateY(-3px); }
-.stat-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.4rem; }
+.stat-value { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.4rem; }
 .stat-label { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
 
 /* ── Grille de posts ──────────────────────────── */
@@ -180,9 +180,17 @@
 .project-nav-link:hover { border-color: rgba(220,38,38,0.4); transform: translateY(-3px); }
 .project-nav-link.next { align-items: flex-end; text-align: right; }
 .project-nav-dir { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-.project-nav-name { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; }
+.project-nav-name { font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 700; }
 @media (max-width: 768px) {
   .project-nav { padding: 0 1.5rem 4rem; gap: 0.75rem; }
   .project-nav-link { padding: 1.1rem 1.2rem; }
   .project-nav-name { font-size: 1rem; }
+}
+
+/* Stalinist One est très large : titres réduits sur mobile pour ne pas déborder */
+@media (max-width: 768px) {
+  .section-title { font-size: min(5.6vw, 1.2rem); }
+  .project-title { font-size: 8vw; }
+  .project-nav-link { min-width: 0; }
+  .project-nav-name { font-size: 0.85rem; overflow-wrap: anywhere; }
 }

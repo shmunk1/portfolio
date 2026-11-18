@@ -38,9 +38,9 @@ section { position: relative; z-index: 1; scroll-margin-top: 4rem; }
   animation: fadeUp 0.7s 0.2s ease forwards;
 }
 .hero-name {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--display);
   font-size: clamp(3.5rem, 9vw, 8rem);
-  font-weight: 800; line-height: 0.93; letter-spacing: -0.03em;
+  font-weight: 800; line-height: 1.12; letter-spacing: 0;
   margin-bottom: 1.6rem;
   opacity: 0; transform: translateY(30px);
   animation: fadeUp 0.8s 0.35s ease forwards;
@@ -67,9 +67,9 @@ section { position: relative; z-index: 1; scroll-margin-top: 4rem; }
   color: var(--accent2); margin-bottom: 0.6rem;
 }
 .section-title {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--display);
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;
+  font-weight: 800; letter-spacing: 0; line-height: 1.1;
   margin-bottom: 1rem;
 }
 .section-divider {
@@ -136,7 +136,7 @@ section { position: relative; z-index: 1; scroll-margin-top: 4rem; }
 .project-body { padding: 1.5rem; }
 .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
 .project-tags .tag { padding: 0.25rem 0.6rem; }
-.project-name { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+.project-name { font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
 .project-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
 .card-full-link { position: absolute; inset: 0; z-index: 2; border-radius: 20px; }
 .project-link {
@@ -174,7 +174,7 @@ section { position: relative; z-index: 1; scroll-margin-top: 4rem; }
 }
 .skills-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
 .skills-group-title {
-  font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+  font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700;
   margin-bottom: 1.2rem; color: var(--muted); letter-spacing: 0.05em;
 }
 .skill-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
@@ -252,4 +252,9 @@ section { position: relative; z-index: 1; scroll-margin-top: 4rem; }
 }
 @media (max-width: 480px) {
   .skill-cards { grid-template-columns: 1fr; }
+}
+
+/* Stalinist One est très large : titres réduits sur mobile pour ne pas déborder */
+@media (max-width: 768px) {
+  .section-title { font-size: min(6.4vw, 1.8rem); }
 }
